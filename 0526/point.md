@@ -35,9 +35,12 @@ ___
         str.indexOf('your');  //返回-1
 
 - 提取字符串
-**slice(start[,end])** *注：* 可为负索引
+**slice(start[,end])** *注：* 可为负索引，不修改原String和Array
 **substring(start[,end])**
 **substr(start[,length])** *注：* 可为负索引
+`问： String的slice方法和Array中的slice方法有设区别？`
+ String.slice(start,end) 返回起止下标之间的字符；
+ Array.slice(start,end) 返回起止下标之间的元素组成的数组，不修改原数组，返回一个子数组;
 
         str.slice(0,3);
         str.slice(2);
@@ -47,7 +50,14 @@ ___
 **toLowerCase()**
 
 - 替换
-**replace()** *注：* 只替换首个匹配
+**replace()** *注：* 只替换首个匹配；可使用正则表达式匹配字符
+`问：全部替换应该怎么做`
+
+        // 使用正则表达式 /g 全局搜索匹配
+         let str = 'my test replaceAll my test.'
+        let newStr = str.replace(/my/g,'your');
+        console.log(str);
+        console.log(newStr);
 
 ## 3.字符串与数组之间的转换
 
