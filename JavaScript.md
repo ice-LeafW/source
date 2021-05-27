@@ -1,8 +1,10 @@
 # JavaScript
 
-JavaScript第一步<https://developer.mozilla.org/zh-CN/docs/Learn/JavaScript/First_steps>
+## JavaScript第一步
 
-## 1.脚本调用——async和defer
+<https://developer.mozilla.org/zh-CN/docs/Learn/JavaScript/First_steps>
+
+### 1.脚本调用——async和defer
 
 ___
 
@@ -24,7 +26,7 @@ ___
 ***使用情况***
 当脚本需要等待页面解析，且依赖于其他脚本，调用这些脚本时应使用`defer`，将关联的脚本按所需顺序置于HTML中。
 
-## 2.字符串
+### 2.字符串
 
 ___
 
@@ -59,7 +61,7 @@ ___
         console.log(str);
         console.log(newStr);
 
-## 3.字符串与数组之间的转换
+### 3.字符串与数组之间的转换
 
 ___
 
@@ -72,7 +74,7 @@ ___
         let str = ['dog','cat'];
         str.toString();    //"dog,cat"
 
-## 4. 数组添加、删除项
+### 4. 数组添加、删除项
 
 ___
 
