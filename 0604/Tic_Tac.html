@@ -112,7 +112,7 @@
             count = id;
             clearMap();
             myMap = deepCopy(historyArray[id].status);
-            console.log(historyArray[id]);
+            // console.log(historyArray[id]);
             // 2、恢复到 id 步的棋盘状态
             for (let i = 0; i < historyArray[id].status.length; i++) {
                 for (let j = 0; j < historyArray[id].status.length; j++) {
@@ -125,7 +125,7 @@
                         img.src = historyArray[id].status[i][j] === 'X' ? 'X.png' : 'O.png';
                         img.width = '50';
                         addX.appendChild(img);
-                        console.log(historyArray);
+                        // console.log(historyArray);
 
                         // 转换玩家
                         next.innerHTML = historyArray[id + 1].str === 'X' ? 'Next player: O' : 'Next player: X';
@@ -143,7 +143,7 @@
             // 3、删除 historyArray 中下标>id的的元素
             historyArray.splice(id + 1);
 
-            console.log(historyArray);
+            // console.log(historyArray);
             // console.log(historyArray);
             mainTable.addEventListener('click', getIndex); //表格
         };
@@ -179,7 +179,7 @@
                     str = next.textContent[next.textContent.length - 1];
                     let tmpArr = deepCopy(myMap);
                     historyArray.push(new Historymap(countTmp, str, tmpArr));
-                    console.log(historyArray);
+                    // console.log(historyArray);
                 }
             } else {
                 alert('此处已有棋子');
