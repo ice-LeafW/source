@@ -1,0 +1,59 @@
+#container {
+    display: flex;
+}
+
+#mainTable {
+    display: flex;
+    width: 213px;
+    height: 213px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    border-left: 1px solid #000;
+    border-top: 1px solid #000;
+    font-size: 0;
+    margin-right: 20px;
+}
+
+.Td {
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+}
+
+.Td img {
+    margin: 10px;
+}
+
+
+/* 
+#mainText {
+    height: 500px;
+} */
+
+#nextOrGameOver {
+    height: 30px;
+    line-height: 30px;
+    margin: 0;
+}
+
+#mainText>div {
+    height: 24px;
+    margin: 4px 0;
+    font-size: 0;
+}
+
+#mainText>div p {
+    display: inline-block;
+    margin-right: 3px;
+    font-size: 16px;
+}
+
+#mainText>div input {
+    background-color: #efefef;
+    border: 2px solid #000;
+    height: 24px;
+    line-height: 20px;
+    font-size: 16px;
+}
