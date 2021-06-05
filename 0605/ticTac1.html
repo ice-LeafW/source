@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="ticTac.css">
+
+    <title>Tic Tac</title>
+</head>
+
+<body>
+    <div id="container">
+        <div id="mainTable">
+            <div class="formCell" id="0">1</div>
+            <div class="formCell" id="1">2</div>
+            <div class="formCell" id="2">3</div>
+
+            <div class="formCell" id="3">1</div>
+            <div class="formCell" id="4">2</div>
+            <div class="formCell" id="5">3</div>
+
+            <div class="formCell" id="6">1</div>
+            <div class="formCell" id="7">2</div>
+            <div class="formCell" id="8">3</div>
+        </div>
+        <div id="mainText">
+            <h1 id="nextOrGameOver">Next player:X</h1>
+            <div id="d0">
+                <p>1.</p>
+                <input type="button" id="s0" value="Go to game start">
+            </div>
+        </div>
+    </div>
+    <script>
+        /*
+         *  ticTac 优化第一版
+         *  优化内容：
+         *  1、明确入口函数 main() 
+         *  2、减少不必要的全局变量，函数调用时，以参数形式传入,使用隐式转换
+         *  3、使用对象代替构造函数
+         *  4、优化连线判断函数算法 line() slash() rowOrCol() winner()
+         */
+
+
+        let myMap = [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0]
+        ]; //记录此处是否有棋子
+        let count = 0; // 记录步数
+        let historyArray = []; //存储每一步历史记录的对象数组
+
+
+        // 深拷贝
+        let deepCopy = (obj) => {
+            // 只拷贝对象
+            if (typeof obj !== 'object') return;
+            // 根据obj的类型判断是新建一个数组还是一个对象
+            var newObj = obj instanceof Array ? [] : {};
+            for (var key in obj) {
+                // 遍历obj,并且判断是obj的属性才拷贝
+                if (obj.hasOwnProperty(key)) {
+                    // 判断属性值的类型，如果是对象递归调用深拷贝
+                    newObj[key] = typeof obj[key] === 'object' ? deepCopy(obj[key]) : obj[key];
+                }
+            }
+            return newObj;
+        };
+
+        //清空棋盘
+        let clearMap = (formCell) => {
+            for (let i = 0; i < formCell.length; i++) {
+                while (formCell[i].hasChildNodes()) {
+                    formCell[i].removeChild(formCell[i].firstChild);
+                }
+            }
+            myMap = [
+                [0, 0, 0],
+                [0, 0, 0],
+                [0, 0, 0]
+            ];
+        };
+
+        // 返回历史记录
+        let history = (e) => {
+            const formCell = document.getElementsByClassName('formCell');
+            const mainTable = document.getElementById('mainTable');
+            const mainText = document.getElementById('mainText');
+            const next = document.getElementById('nextOrGameOver');
+            let id = e.target.id;
+
+            id = parseInt(id.slice(1));
+            count = id;
+
+            // 1、清空棋盘
+            clearMap(formCell);
+            myMap = deepCopy(historyArray[id].status);
+            // 2、恢复到 id 步的棋盘状态
+            for (let i = 0; i < historyArray[id].status.length; i++) {
+                for (let j = 0; j < historyArray[id].status.length; j++) {
+                    // 获取该处的 id
+                    let indexTmp = String(i * 3 + j);
+
+                    if (historyArray[id].status[i][j] === 'X' || historyArray[id].status[i][j] === 'O') {
+                        let addX = document.getElementById(indexTmp);
+                        let img = document.createElement('img');
+                        img.src = historyArray[id].status[i][j] === 'X' ? 'X.png' : 'O.png';
+                        img.width = '50';
+                        addX.appendChild(img);
+                        console.log(historyArray);
+                    }
+                }
+            };
+            // 4、移除id一下的 input 标签
+            let div = mainText.querySelectorAll('div');
+            for (let k = id + 1; k < div.length; k++) {
+                let divId = String('d' + k);
+                let tmpDiv = document.getElementById(divId);
+                tmpDiv.parentNode.removeChild(tmpDiv);
+            };
+            div = mainText.querySelectorAll('div');
+            // 3、删除 historyArray 中下标>id的的元素
+            historyArray.splice(id + 1);
+            // console.log(historyArray);
+            mainTable.addEventListener('click', getIndex); //表格
+        };
+
+        // 按钮添加事件
+        let buttonEvent = () => {
+            const input = document.getElementsByTagName('input');
+            for (let i = 0; i < input.length; i++) {
+                input[i].addEventListener('click', history);
+            }
+        };
+
+        // 获取点击的formCell的index
+        let getIndex = (e) => {
+            const mainTable = document.getElementById('mainTable');
+            const formCell = document.getElementsByClassName('formCell');
+            const mainText = document.getElementById('mainText');
+            const next = document.getElementById('nextOrGameOver');
+
+            // 获取点击的位置id
+            let index = Number(e.target.id);
+            let indexX = parseInt(index / 3);
+            let indexY = index % 3;
+            let countTmp = count;
+            let str = '';
+
+            // 判断点击位置是否已经有棋子
+            if (!myMap[indexX][indexY]) {
+                // 画棋子
+                str = next.textContent[next.textContent.length - 1]; //获取 player 是 X 还是 O 
+                myMap[indexX][indexY] = str;
+
+
+                if (count < 10) {
+                    draw(mainText, next, index, str);
+                    // count++;
+                    if (line(next, str, indexX, indexY)) {
+                        mainTable.removeEventListener('click', getIndex);
+                    }
+                    str = next.textContent[next.textContent.length - 1];
+                    let tmpArr = deepCopy(myMap);
+                    historyArray.push({
+                        step: countTmp,
+                        str: str,
+                        status: tmpArr
+                    });
+                }
+            } else {
+                alert('此处已有棋子');
+            }
+        };
+
+        // 添加棋子
+        let draw = (mainText, next, index, str) => {
+
+            let indexStr = index.toString();
+            let addX = document.getElementById(indexStr);
+            let img = document.createElement('img');
+            count++;
+
+            // 添加图片
+            img.src = str === 'X' ? 'X.png' : 'O.png';
+            img.width = '50';
+            addX.appendChild(img);
+
+            // 添加按钮
+            let div = document.createElement('div');
+            let p = document.createElement('p');
+            let input = document.createElement('input');
+
+            p.textContent = (count + 1) + '.';
+            div.id = 'd' + count;
+            input.type = 'button';
+            input.value = 'Go to game #' + count;
+            input.id = 's' + count;
+            div.appendChild(p);
+            div.appendChild(input);
+            mainText.appendChild(div);
+            buttonEvent();
+            // 转换玩家
+            next.innerHTML = str === 'X' ? 'Next player: O' : 'Next player: X';
+        };
+
+        // 判断是否有winner
+        let line = (next, str, x, y) => {
+            return rowOrCol(next, str, x, y) || slash(next, str);
+        };
+
+        let winner = (next, str) => {
+            next.textContent = 'Winner: ' + str;
+            return true;
+        };
+
+        //  横线或竖线
+        let rowOrCol = (next, str, x, y) => {
+            let y1 = (y + 1) % 3;
+            let y2 = (y + 2) % 3;
+            let x1 = (x + 1) % 3;
+            let x2 = (x + 2) % 3;
+            if (myMap[x][y1] === str && myMap[x][y2] === str) {
+                return winner(next, str);
+            } else if (myMap[x1][y] === str && myMap[x2][y] === str) {
+                return winner(next, str);
+            } else {
+                return false;
+            }
+        };
+
+        // 斜线优化，不需要判断当前位置，直接判断两条斜线
+        let slash = (next, str) => {
+            // 斜线（1,1）必须匹配
+            if (myMap[1][1] === str) {
+                if (myMap[0][0] === str && myMap[2][2] === str) {
+                    return winner(next, str);
+                } else if (myMap[0][2] === str && myMap[2][0] === str) {
+                    return winner(next, str);
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        };
+
+        // 入口主函数
+        let main = () => {
+            const mainTable = document.getElementById('mainTable');
+            const next = document.getElementById('nextOrGameOver');
+            let hisMap = deepCopy(myMap); //存储每一步历史记录的对象数组
+            historyArray.push({
+                step: 0,
+                str: 'X',
+                status: hisMap
+            });
+            count++;
+
+            buttonEvent();
+            mainTable.addEventListener('click', getIndex); //表格监听
+        };
+
+        main();
+    </script>
+</body>
+
+</html>
