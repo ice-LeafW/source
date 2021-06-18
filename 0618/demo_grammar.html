@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.13/dist/vue.js"></script>
+    <title>Document</title>
+    <style>
+        div {
+            /* padding-bottom: 10px; */
+            margin-bottom: 20px;
+            border-bottom: 1px solid #288;
+        }
+        
+        .red {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        插值顺序：<br> hello!
+        <br>Vue<br> 文本插值： {{msg}}
+    </div>
+    <div id="app1" v-once>
+        文本插值，只执行一次插值：{{msg}}
+    </div>
+    <div id="app2">
+        原始HTML：{{msg}}
+        <p>Using mustaches:{{rawHtml}}</p>
+        <p v-html='rawHtml'></p>
+    </div>
+    <div id="app3">
+        v-bind:属性=“”
+        <div v-bind:class="color">this one is red</div>
+        <p>javascript表达式：{{ number+9 }}</p>
+        <p>{{condition?'YES':'NO'}}</p>
+        <p>{{ message.split('').reverse().join(',')}}</p>
+    </div>
+    <script>
+        // 普通插值
+        let vm = new Vue({
+            el: '#app',
+            data: {
+                msg: 'hello!'
+            }
+        });
+        vm.msg = 'Vue';
+        // v-once
+        let vm1 = new Vue({
+            el: '#app1',
+            data: {
+                msg: 'hello!'
+            }
+        });
+        vm1.msg = 'Vue';
+        // 原始HTML
+        let vm2 = new Vue({
+            el: '#app2',
+            data: {
+                msg: 'hello',
+                rawHtml: ' <span style="color:skyblue">this is shoule be skyblue</span>'
+            }
+        });
+        vm2.msg = 'hi';
+        // 属性绑定
+        let vm3 = new Vue({
+            el: '#app3',
+            data: {
+                color: 'red',
+                number: 1,
+                condition: 1,
+                message: 'Vue'
+            }
+        });
+    </script>
+</body>

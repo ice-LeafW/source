@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.13/dist/vue.js"></script>
+    <title>计算属性与侦听器</title>
+    <style>
+        #example>div {
+            /* padding-bottom: 10px; */
+            margin-bottom: 20px;
+            border-bottom: 1px solid #288;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="example">
+        <p>Original message: "{{ message }}"</p>
+        <p>Computed reversed message: "{{ reversedMessage }}"</p>
+        <div></div>
+        <p>Reversed message(): "{{ reversedMessage1() }}"</p>
+    </div>
+    <script>
+        var vm = new Vue({
+            el: '#example',
+            data: {
+                message: 'Hello'
+            },
+            computed: {
+                // 计算属性的 getter
+                reversedMessage: function() {
+                    // `this` 指向 vm 实例
+                    return this.message.split('').reverse().join('')
+                }
+            },
+            methods: {
+                reversedMessage1: function() {
+                    return this.message.split('').reverse().join('*')
+                }
+            }
+        });
+    </script>
+</body>
