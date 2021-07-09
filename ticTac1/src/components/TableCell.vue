@@ -11,9 +11,10 @@ export default {
    
     methods:{
         addValue:function (){
+            // console.log(this.innerValue);
             this.$emit('onAddValue');
             // this.innerValue='X';
-            // console.log(this.innerValue);
+            
         }
     }
 }
