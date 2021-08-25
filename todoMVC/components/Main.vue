@@ -23,10 +23,10 @@
                 </ul>
                 <div class="footer">
                     <el-row>
-                        <el-col :span="9" ><span><strong>{{leftItems}}</strong> items left</span></el-col>
-                        <el-col :span="2"><el-button plain autofocus size="small" @click.stop="all()">All</el-button></el-col>
-                        <el-col :span="3"><el-button plain size="small" @click.stop="active()">Active</el-button></el-col>
-                        <el-col :span="4"><el-button plain size="small" @click.stop="completed()">Completed</el-button></el-col>
+                        <el-col :span="9" ><span><strong>{{this.allTodoList.filter(item => !item.completed).length}}</strong> items left</span></el-col>
+                        <el-col :span="2"><el-button plain autofocus size="small" @click.stop="getall()">All</el-button></el-col>
+                        <el-col :span="3"><el-button plain size="small" @click.stop="getactive()">Active</el-button></el-col>
+                        <el-col :span="4"><el-button plain size="small" @click.stop="getcompleted()">Completed</el-button></el-col>
                         <el-col :span="6"><el-button plain size="small" v-if="displayClear()" @click.stop="clearCompleted()" >Clear completed</el-button></el-col>
                     </el-row>
                 </div>
@@ -52,11 +52,11 @@ export default {
             todoList:[]
         }
     },
-    computed:{
-        leftItems:function(){
-            return this.allTodoList.filter(item => !item.completed).length;
-        }
-    },
+    // computed:{
+    //     leftItems:function(){
+    //         return this.allTodoList.filter(item => !item.completed).length;
+    //     }
+    // },
     methods:{
         /**
          * 添加项目
@@ -67,14 +67,14 @@ export default {
         submitTodo(){
             if(!this.input.length){
                 return
-            }else{
-                this.allTodoList.push({
+            }
+            this.allTodoList.push({
                 content: this.input,
                 completed: false,
                 hidden:false
-                });
-                this.input = '';
-            }
+            });
+            this.input = '';
+            
         },
         /**
          * 单项删除
@@ -101,13 +101,14 @@ export default {
          * 1. 当存在已完成项目时，显示该按钮
         */
         displayClear(){
-            for(let i=0; i<this.allTodoList.length; i++){
-                if(this.allTodoList[i].completed){
-                    this.clear = true;
-                    return true;
-                }
-            }
-            return false;
+            return this.allTodoList.some(element => element.completed)
+            // for(let i=0; i<this.allTodoList.length; i++){
+            //     if(this.allTodoList[i].completed){
+            //         this.clear = true;
+            //         return true;
+            //     }
+            // }
+            // return false;
         },
         /**
          * clear completed按钮事件，删除已完成事件
@@ -139,13 +140,13 @@ export default {
         /**
          * 三类点击事件，更新显示的列表
          */
-        all(){
+        getall(){
             this.todoList = this.allTodoList;
         },
-        active(){
+        getactive(){
             this.todoList = this.allTodoList.filter(item => !item.completed);
         },
-        completed(){
+        getcompleted(){
             this.todoList = this.allTodoList.filter(item => item.completed);
         }
     },
@@ -153,7 +154,7 @@ export default {
      * 页面载入，默认选择all按钮，执行all的click事件
      */
     mounted:function () {
-        this.all();
+        this.getall();
     }
 }
 </script>
@@ -253,8 +254,6 @@ ul > li{
     line-height: 58px;
     color: #d9d9d9 !important;
     text-decoration: line-through;
-    /* border:2px solid #777; */
-    /* font-size: 12px; */
 }
 .item .el-button{
     float:right;
