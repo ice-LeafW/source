@@ -13,19 +13,19 @@ const routes = [{
         path: '/',
         name: 'all',
         component: () =>
-            import ('../components/Main')
+            import ('../components/TodoMain')
     },
     {
         path: '/active',
         name: 'active',
         component: () =>
-            import ('../components/Main')
+            import ('../components/TodoMain')
     },
     {
         path: '/completed',
         name: 'completed',
         component: () =>
-            import ('../components/Main')
+            import ('../components/TodoMain')
     }
 ]
 

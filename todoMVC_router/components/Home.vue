@@ -2,10 +2,10 @@
     <div class="home">
         <el-container>
             <el-header>
-                <Header></Header>
+                <TodoHeader></TodoHeader>
             </el-header>
             <el-main>
-                <Main></Main>
+                <TodoMain></TodoMain>
             </el-main>
             <el-footer>
                 <p>Double-click tp edit a todo</p>
@@ -20,14 +20,14 @@
 </template> 
  
 <script> 
-import Header from './Header.vue'
-import Main from './Main.vue'
+import TodoHeader from './TodoHeader.vue'
+import TodoMain from './TodoMain.vue'
 
 export default { 
   name: 'Home', 
   components:{
-      Header,
-      Main
+      TodoHeader,
+      TodoMain
       }
 } 
 </script> 
